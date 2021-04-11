@@ -1,0 +1,14 @@
+{
+  "name": "dropdb",
+  "version": "1.0.0",
+  "description": "Simple database for querying data without any hassle.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "yasmikash",
+  "license": "ISC",
+  "dependencies": {
+    "uuid": "^8.3.2"
+  }
+}

@@ -1,0 +1,4 @@
+node_modules/
+dropdb/
+package-lock.json
+app.js
