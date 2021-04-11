@@ -3,7 +3,6 @@ const osPath = require("path");
 
 const {
   readFromFile,
-  writeFile,
   readFromFileCb,
   writeToFile,
 } = require("./util/file-process");
@@ -19,9 +18,7 @@ class DropDB {
     }
 
     // Clear the file with [] if no data is available
-    readFromFileCb(this._path, (dataArray) => {
-      if (dataArray.length === 0) writeFile(this._path, []);
-    });
+    readFromFileCb(this._path, () => {});
   }
 
   set path(path) {
@@ -37,11 +34,10 @@ class DropDB {
     }
 
     try {
-      if (!this._path) throw new Error("DROPDB: DB path is not provided");
       if (typeof path !== "string")
-        throw new TypeError("DROPDB: Object path should be string");
+        throw new TypeError("DROPDB: Path should be a string value");
       if (typeof object !== "object")
-        throw new TypeError("DROPDB: Object should be passed as data");
+        throw new TypeError("DROPDB: Data should be passed as object");
       const dataArray = await readFromFile(this._path);
 
       const itemId = v4();
@@ -79,17 +75,17 @@ class DropDB {
 
       const dataArray = await readFromFile(this._path);
 
-      let dataPath = null;
+      let pathData = null;
       for (let item of dataArray) {
         if (item[path]) {
-          dataPath = item[path];
+          pathData = item[path];
           break;
         }
       }
 
-      if (dataPath !== null) {
+      if (pathData !== null) {
         let dataItem = null;
-        for (let item of dataPath) {
+        for (let item of pathData) {
           if (item.id === id) {
             dataItem = item;
             break;
@@ -97,8 +93,88 @@ class DropDB {
         }
         cb(null, dataItem);
       } else {
-        cb(null, dataPath);
+        cb(null, null);
       }
+    } catch (err) {
+      cb(err);
+    }
+  }
+
+  async editById(path, id, object, cb) {
+    if (cb) {
+      if (typeof cb !== "function")
+        throw new TypeError("DROPDB: Callback should be a function");
+    }
+
+    try {
+      if (typeof path !== "string")
+        throw new TypeError("DROPDB: Path should be string value");
+      if (typeof id !== "string")
+        throw new TypeError("DROPDB: Id should be passed as data");
+      if (typeof object !== "object")
+        throw new TypeError("DROPDB: Data should be passed as object");
+
+      const dataArray = await readFromFile(this._path);
+
+      let pathData = null;
+      let pathDataIndex = 0;
+      for (let item of dataArray) {
+        if (item[path]) {
+          pathData = item[path];
+          break;
+        }
+        pathDataIndex++;
+      }
+
+      if (pathData !== null) {
+        let dataItem = null;
+        let dataItemIndex = 0;
+        for (let item of pathData) {
+          if (item.id === id) {
+            dataItem = item;
+            break;
+          }
+          dataItemIndex++;
+        }
+
+        // Prepare the data to be updated in the db
+        if (dataItem !== null) {
+          const itemId = dataItem.id;
+          dataItem = { ...dataItem, ...object, id: itemId };
+          dataArray[pathDataIndex][path][dataItemIndex] = dataItem;
+
+          await writeToFile(this._path, dataArray);
+
+          if (cb) cb(null, dataItem);
+        } else {
+          cb(null, dataItem);
+        }
+      } else {
+        cb(null, null);
+      }
+    } catch (err) {
+      cb(err);
+    }
+  }
+
+  async getPathData(path, cb) {
+    if (typeof cb !== "function")
+      throw new TypeError("DROPDB: Callback should be a function");
+
+    try {
+      if (typeof path !== "string")
+        throw new TypeError("DROPDB: Path should be a string value");
+
+      const dataArray = await readFromFile(this._path);
+
+      let pathData = null;
+      for (let item of dataArray) {
+        if (item[path]) {
+          pathData = item[path];
+          break;
+        }
+      }
+      cb(null, pathData);
     } catch (err) {
       cb(err);
     }

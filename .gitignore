@@ -1,4 +1,4 @@
 node_modules/
-dropdb/
+db/
 package-lock.json
 app.js

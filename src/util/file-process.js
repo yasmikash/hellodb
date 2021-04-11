@@ -23,12 +23,12 @@ const readFromFileCb = (path, cb) => {
     if (err) {
       // Write with empty [] if no file exists
       if (err.code === "ENOENT") {
-        writeToFile(path, [], () => readFromFile(path, cb));
+        writeToFileCb(path, [], () => readFromFileCb(path, cb));
       } else {
         throw new Error("DROPDB: Could not read data");
       }
     } else {
-      cb(data);
+      cb(JSON.parse(data));
     }
   });
 };
