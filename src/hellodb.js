@@ -10,9 +10,9 @@ class HelloDB extends EventEmitter {
     if (path) {
       if (typeof path !== "string")
         throw new TypeError("HELLODB: Path should be a string value");
-      this._path = osPath.join(__dirname, path, "db.json");
+      this._path = osPath.join(osPath.resolve("./"), path, "/db.json");
     } else {
-      this._path = osPath.join(__dirname, "/db.json");
+      this._path = osPath.join(osPath.resolve("./"), "/db.json");
     }
 
     const initDB = async () => {
