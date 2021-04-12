@@ -1,14 +1,12 @@
 const { v4 } = require("uuid");
 const osPath = require("path");
+const EventEmitter = require("events");
 
-const {
-  readFromFile,
-  readFromFileCb,
-  writeToFile,
-} = require("./util/file-process");
+const { readFromFile, writeToFile } = require("./util/file-process");
 
-class DropDB {
+class DropDB extends EventEmitter {
   constructor(path) {
+    super();
     if (path) {
       if (typeof path !== "string")
         throw new TypeError("DROPDB: Path should be a string value");
@@ -17,8 +15,21 @@ class DropDB {
       this._path = osPath.join(__dirname, "/db.json");
     }
 
+    const initDB = async () => {
+      try {
+        try {
+          await readFromFile(this._path);
+        } catch (err) {
+          if (err.code === "ENOENT") await writeToFile(this._path, []);
+        }
+      } catch (err) {
+        throw new Error("DROPDB: Init database failed");
+      }
+      this.emit("ready");
+    };
+
     // Clear the file with [] if no data is available
-    readFromFileCb(this._path, () => {});
+    initDB();
   }
 
   set path(path) {
@@ -154,6 +165,61 @@ class DropDB {
       }
     } catch (err) {
       cb(err);
+    }
+  }
+
+  async deleteById(path, id, cb) {
+    if (cb) {
+      if (typeof cb !== "function")
+        throw new TypeError("DROPDB: Callback should be a function");
+    }
+
+    try {
+      if (typeof path !== "string")
+        throw new TypeError("DROPDB: Path should be string value");
+      if (typeof id !== "string")
+        throw new TypeError("DROPDB: Id should be passed as data");
+
+      const dataArray = await readFromFile(this._path);
+
+      let pathData = null;
+      let pathDataIndex = 0;
+      for (let item of dataArray) {
+        if (item[path]) {
+          pathData = item[path];
+          break;
+        }
+        pathDataIndex++;
+      }
+
+      if (pathData !== null) {
+        let dataItem = null;
+        let dataItemIndex = 0;
+        for (let item of pathData) {
+          if (item.id === id) {
+            dataItem = item;
+            break;
+          }
+          dataItemIndex++;
+        }
+
+        // Ready to be removed the data from db
+        if (dataItem) {
+          dataArray[pathDataIndex][path].splice(
+            dataItemIndex,
+            dataItemIndex + 1
+          );
+
+          await writeToFile(this._path, dataArray);
+          if (cb) cb(null, dataItem);
+        } else {
+          if (cb) cb(null, null);
+        }
+      } else {
+        if (cb) cb(null, null);
+      }
+    } catch (err) {
+      if (cb) cb(err);
     }
   }
 
