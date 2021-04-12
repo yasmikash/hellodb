@@ -1,7 +1,7 @@
 {
   "name": "dropdb",
   "version": "1.0.0",
-  "description": "Simple database for querying data without any hassle.",
+  "description": "Simple and lightweight JSON database that stores data using keys.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
