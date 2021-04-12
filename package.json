@@ -1,6 +1,6 @@
 {
   "name": "hellodb",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple and lightweight JSON database that stores data using keys.",
   "main": "index.js",
   "scripts": {
