@@ -4,12 +4,12 @@ const EventEmitter = require("events");
 
 const { readFromFile, writeToFile } = require("./util/file-process");
 
-class DropDB extends EventEmitter {
+class LEAFDB extends EventEmitter {
   constructor(path) {
     super();
     if (path) {
       if (typeof path !== "string")
-        throw new TypeError("DROPDB: Path should be a string value");
+        throw new TypeError("LEAFDB: Path should be a string value");
       this._path = osPath.join(__dirname, path, "db.json");
     } else {
       this._path = osPath.join(__dirname, "/db.json");
@@ -23,7 +23,7 @@ class DropDB extends EventEmitter {
           if (err.code === "ENOENT") await writeToFile(this._path, []);
         }
       } catch (err) {
-        throw new Error("DROPDB: Init database failed");
+        throw new Error("LEAFDB: Init database failed");
       }
       this.emit("ready");
     };
@@ -34,21 +34,21 @@ class DropDB extends EventEmitter {
 
   set path(path) {
     if (typeof path !== "string")
-      throw new TypeError("DROPDB: Path should be a string value");
+      throw new TypeError("LEAFDB: Path should be a string value");
     this._path = path + ".json";
   }
 
   async put(path, object, cb) {
     if (cb) {
       if (typeof cb !== "function")
-        throw new TypeError("DROPDB: Callback should be a function");
+        throw new TypeError("LEAFDB: Callback should be a function");
     }
 
     try {
       if (typeof path !== "string")
-        throw new TypeError("DROPDB: Path should be a string value");
+        throw new TypeError("LEAFDB: Path should be a string value");
       if (typeof object !== "object")
-        throw new TypeError("DROPDB: Data should be passed as object");
+        throw new TypeError("LEAFDB: Data should be passed as object");
       const dataArray = await readFromFile(this._path);
 
       const itemId = v4();
@@ -76,13 +76,13 @@ class DropDB extends EventEmitter {
 
   async getById(path, id, cb) {
     if (typeof cb !== "function")
-      throw new TypeError("DROPDB: Callback should be a function");
+      throw new TypeError("LEAFDB: Callback should be a function");
 
     try {
       if (typeof path !== "string")
-        throw new TypeError("DROPDB: Path should be a string value");
+        throw new TypeError("LEAFDB: Path should be a string value");
       if (typeof id !== "string")
-        throw new TypeError("DROPDB: Id should be a string value");
+        throw new TypeError("LEAFDB: Id should be a string value");
 
       const dataArray = await readFromFile(this._path);
 
@@ -114,16 +114,16 @@ class DropDB extends EventEmitter {
   async editById(path, id, object, cb) {
     if (cb) {
       if (typeof cb !== "function")
-        throw new TypeError("DROPDB: Callback should be a function");
+        throw new TypeError("LEAFDB: Callback should be a function");
     }
 
     try {
       if (typeof path !== "string")
-        throw new TypeError("DROPDB: Path should be string value");
+        throw new TypeError("LEAFDB: Path should be string value");
       if (typeof id !== "string")
-        throw new TypeError("DROPDB: Id should be passed as data");
+        throw new TypeError("LEAFDB: Id should be passed as data");
       if (typeof object !== "object")
-        throw new TypeError("DROPDB: Data should be passed as object");
+        throw new TypeError("LEAFDB: Data should be passed as object");
 
       const dataArray = await readFromFile(this._path);
 
@@ -171,14 +171,14 @@ class DropDB extends EventEmitter {
   async deleteById(path, id, cb) {
     if (cb) {
       if (typeof cb !== "function")
-        throw new TypeError("DROPDB: Callback should be a function");
+        throw new TypeError("LEAFDB: Callback should be a function");
     }
 
     try {
       if (typeof path !== "string")
-        throw new TypeError("DROPDB: Path should be string value");
+        throw new TypeError("LEAFDB: Path should be string value");
       if (typeof id !== "string")
-        throw new TypeError("DROPDB: Id should be passed as data");
+        throw new TypeError("LEAFDB: Id should be passed as data");
 
       const dataArray = await readFromFile(this._path);
 
@@ -225,11 +225,11 @@ class DropDB extends EventEmitter {
 
   async getPathData(path, cb) {
     if (typeof cb !== "function")
-      throw new TypeError("DROPDB: Callback should be a function");
+      throw new TypeError("LEAFDB: Callback should be a function");
 
     try {
       if (typeof path !== "string")
-        throw new TypeError("DROPDB: Path should be a string value");
+        throw new TypeError("LEAFDB: Path should be a string value");
 
       const dataArray = await readFromFile(this._path);
 
@@ -251,4 +251,4 @@ class DropDB extends EventEmitter {
   }
 }
 
-module.exports = DropDB;
+module.exports = LEAFDB;

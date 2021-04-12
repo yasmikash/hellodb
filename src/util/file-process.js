@@ -5,11 +5,11 @@ const readFromFile = (path) => {
     fs.readFile(path, (err, data) => {
       if (err) {
         if (err.code === "ENOENT") {
-          const error = new Error("DROPDB: Could not read data");
+          const error = new Error("LEAFDB: Could not read data");
           error.code = "ENOENT";
           reject(error);
         } else {
-          reject(new Error("DROPDB: Could not read data"));
+          reject(new Error("LEAFDB: Could not read data"));
         }
       } else resolve(JSON.parse(data));
     });
@@ -19,7 +19,7 @@ const readFromFile = (path) => {
 const writeToFile = (path, data) => {
   return new Promise((resolve, reject) => {
     fs.writeFile(path, JSON.stringify(data), (err) => {
-      if (err) reject(new Error("DROPDB: Could not write data"));
+      if (err) reject(new Error("LEAFDB: Could not write data"));
       else resolve(true);
     });
   });
