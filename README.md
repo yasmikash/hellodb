@@ -1,10 +1,14 @@
-> Simple and lightweight JSON database that stores data using keys.
+> Simple and lightweight JSON database that helps you perform CRUD operations using keys.
 
 # Installation
 
 Add `hellodb` to your existing Node.JS application.
 
 `npm i hellodb --save`
+
+# About
+
+`hellodb` is a lightweight and simple package which helps you with all the basic CRUD operations you need to perform in your Node.JS project. It uses `uuid` version 4 to generate ids for your object data and store them as a `json` file in your project directory!
 
 # Usage
 
@@ -83,4 +87,4 @@ async function dbOps() {
 }
 ```
 
-Certain errors will be thrown if HelloDB is unable to perform the opetations. null is expected when the provided id or the path name do not exist in the json file.
+Certain errors will be thrown if HelloDB is unable to perform the opetations. null is expected when the provided id or the path name do not exist in the `json` file.

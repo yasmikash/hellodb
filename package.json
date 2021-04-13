@@ -1,7 +1,7 @@
 {
   "name": "hellodb",
   "version": "1.0.3",
-  "description": "Simple and lightweight JSON database that stores data using keys.",
+  "description": "Simple and lightweight JSON database that performs CRUD operations.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -23,6 +23,7 @@
     "database",
     "json",
     "simple database",
-    "lightweight database"
+    "lightweight database",
+    "crud"
   ]
 }
