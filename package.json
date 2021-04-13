@@ -1,6 +1,6 @@
 {
   "name": "hellodb",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Simple and lightweight JSON database that stores data using keys.",
   "main": "index.js",
   "scripts": {
@@ -10,5 +10,19 @@
   "license": "ISC",
   "dependencies": {
     "uuid": "^8.3.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yasmikash/hellodb.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yasmikash/hellodb/issues"
+  },
+  "homepage": "https://github.com/yasmikash/hellodb#readme",
+  "keywords": [
+    "database",
+    "json",
+    "simple database",
+    "lightweight database"
+  ]
 }
