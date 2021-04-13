@@ -38,12 +38,7 @@ class HelloDB extends EventEmitter {
     this._path = path + ".json";
   }
 
-  async put(path, object, cb) {
-    if (cb) {
-      if (typeof cb !== "function")
-        throw new TypeError("HELLODB: Callback should be a function");
-    }
-
+  async put(path, object) {
     try {
       if (typeof path !== "string")
         throw new TypeError("HELLODB: Path should be a string value");
@@ -67,17 +62,13 @@ class HelloDB extends EventEmitter {
 
       await writeToFile(this._path, dataArray);
 
-      if (cb) cb(null, itemId, object);
+      return object;
     } catch (err) {
-      if (cb) cb(err);
-      else throw err;
+      throw err;
     }
   }
 
-  async getById(path, id, cb) {
-    if (typeof cb !== "function")
-      throw new TypeError("HELLODB: Callback should be a function");
-
+  async getById(path, id) {
     try {
       if (typeof path !== "string")
         throw new TypeError("HELLODB: Path should be a string value");
@@ -102,21 +93,16 @@ class HelloDB extends EventEmitter {
             break;
           }
         }
-        cb(null, dataItem);
+        return dataItem;
       } else {
-        cb(null, null);
+        return null;
       }
     } catch (err) {
-      cb(err);
+      throw err;
     }
   }
 
-  async editById(path, id, object, cb) {
-    if (cb) {
-      if (typeof cb !== "function")
-        throw new TypeError("HELLODB: Callback should be a function");
-    }
-
+  async editById(path, id, object) {
     try {
       if (typeof path !== "string")
         throw new TypeError("HELLODB: Path should be string value");
@@ -156,24 +142,19 @@ class HelloDB extends EventEmitter {
 
           await writeToFile(this._path, dataArray);
 
-          if (cb) cb(null, dataItem);
+          return dataItem;
         } else {
-          cb(null, dataItem);
+          return dataItem;
         }
       } else {
-        cb(null, null);
+        return null;
       }
     } catch (err) {
-      cb(err);
+      throw err;
     }
   }
 
-  async deleteById(path, id, cb) {
-    if (cb) {
-      if (typeof cb !== "function")
-        throw new TypeError("HELLODB: Callback should be a function");
-    }
-
+  async deleteById(path, id) {
     try {
       if (typeof path !== "string")
         throw new TypeError("HELLODB: Path should be string value");
@@ -211,15 +192,15 @@ class HelloDB extends EventEmitter {
           );
 
           await writeToFile(this._path, dataArray);
-          if (cb) cb(null, dataItem);
+          return dataItem;
         } else {
-          if (cb) cb(null, null);
+          return null;
         }
       } else {
-        if (cb) cb(null, null);
+        return null;
       }
     } catch (err) {
-      if (cb) cb(err);
+      throw err;
     }
   }
 
